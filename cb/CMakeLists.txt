@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8)
+project( CBDriver )
+find_package( OpenCV REQUIRED )
+# add_library( CBDriver SHARED CBDriver.cpp )
+add_executable( CBDriver CBDriver.cpp )
+add_library( CodeBook libCodeBook.cpp )
+target_link_libraries( CBDriver CodeBook ${OpenCV_LIBS} )
