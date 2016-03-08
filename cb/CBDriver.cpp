@@ -6,6 +6,7 @@ using namespace cv;
 
 int main()
 {
+    /* Provide your own pathname */
     VideoCapture cap("/home/rajan/Courses/CS771/videos/input_video_sample3.mov");
 
     if(!cap.isOpened())
@@ -32,6 +33,8 @@ int main()
         for(j=0;j<480;j++) {
             for(i=0;i<640;i++) {
 
+		if(time == 0)
+		    codebooks[j][i].Init();
                 intensity = frame2.at<Vec3b>(j, i);	// BGR Tuple
                 blue = (int) intensity.val[0];
                 green = (int) intensity.val[1];
@@ -45,6 +48,6 @@ int main()
         time++;
     }
     cap.release();
-    
+   
     return 0; 
 }
