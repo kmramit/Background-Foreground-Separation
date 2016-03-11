@@ -4,6 +4,8 @@
 
 using namespace cv;
 
+int temporal_bound, algo_phase, num_frames;
+
 int main()
 {
     /* Provide your own pathname */
@@ -21,6 +23,7 @@ int main()
     Vec3b intensity;
     bool ret;
 
+    algo_phase = 0;
     for(;;)
     {
         ret = cap.read(frame);
@@ -33,8 +36,8 @@ int main()
         for(j=0;j<480;j++) {
             for(i=0;i<640;i++) {
 
-		if(time == 0)
-		    codebooks[j][i].Init();
+                if(time == 0)
+                    codebooks[j][i].Init();
                 intensity = frame2.at<Vec3b>(j, i);	// BGR Tuple
                 blue = (int) intensity.val[0];
                 green = (int) intensity.val[1];
@@ -48,6 +51,30 @@ int main()
         time++;
     }
     cap.release();
+
+    int sum=0;
+
+    num_frames = time;
+
+    for(j=0;j<480;j++) {
+        for(i=0;i<640;i++) {
+            codebooks[j][i].WrapAround();
+            sum += codebooks[j][i].Length();
+        }
+    }
+
+    printf("Average codewords per codebook = %f\n",(sum*1.0)/(480*640));
+
+    temporal_bound = num_frames/2;
+
+    sum = 0;
+    for(j=0;j<480;j++) {
+        for(i=0;i<640;i++) {
+            codebooks[j][i].TemporalFit();
+            sum += codebooks[j][i].Length();
+        }
+    }
+    printf("Average codewords per codebook (after temporal fitting) = %f\n",(sum*1.0)/(480*640));
    
     return 0; 
 }
