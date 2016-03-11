@@ -14,6 +14,10 @@ int main()
     if(!cap.isOpened())
         return -1;
 
+    ////////////////////////////
+    // TRAINING
+    ////////////////////////////
+
     CodeBook codebooks[480][640];
     printf("Codebooks initialised\n");
 
@@ -49,8 +53,14 @@ int main()
         }
 
         time++;
+        if(time == 900)
+            break;
     }
-    cap.release();
+    //cap.release();
+
+    ///////////////////////
+    // TEMPORAL FITTING
+    ///////////////////////
 
     int sum=0;
 
@@ -76,5 +86,42 @@ int main()
     }
     printf("Average codewords per codebook (after temporal fitting) = %f\n",(sum*1.0)/(480*640));
    
+    /////////////////////
+    // TESTING
+    /////////////////////
+
+    Mat frame3(480, 640, CV_8UC1);
+    namedWindow("original",1);
+    namedWindow("classified",1);
+    for(;;)
+    {
+        ret = cap.read(frame);
+        if(!ret)
+            break;
+
+        resize(frame, frame2, Size(640, 480), 0, 0, INTER_LINEAR);
+
+        for(j=0;j<480;j++) {
+            for(i=0;i<640;i++) {
+
+                intensity = frame2.at<Vec3b>(j, i);	// BGR Tuple
+                blue = (int) intensity.val[0];
+                green = (int) intensity.val[1];
+                red = (int) intensity.val[2];
+                if(codebooks[j][i].DetectForeground(red, green, blue, time) == FOREGROUND)
+                    frame3.at<uchar>(j, i) = 255;
+                else
+                    frame3.at<uchar>(j, i) = 0;
+            }
+        }
+        imshow("original",frame2);
+        imshow("classified",frame3);
+        if(waitKey(30) >= 0)
+            break;
+
+        time++;
+    }
+    cap.release();
+
     return 0; 
 }

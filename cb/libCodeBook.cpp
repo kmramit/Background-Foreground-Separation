@@ -7,10 +7,15 @@
 using namespace std;
 
 // Global constants
-float alpha = 0.5, beta = 1.3, ep1 = 2.0;
+float alpha = 0.5, beta = 1.3, ep1 = 5.0, ep2 = 5.0;
 
 // algo_phase = 0 for training and 1 for testing
 extern int temporal_bound, algo_phase, num_frames;
+
+enum pixel_class{ 
+    FOREGROUND,
+    BACKGROUND
+};
 
 struct CodeWord
 {
@@ -99,7 +104,7 @@ struct CodeBook
             Update(NULL, NULL, r, g, b, time);
         }
         else {
-                if((head->ColorDist(r, g, b, I) <= ep1) && head->Brightness(r, g, b, I)) {
+            if((head->ColorDist(r, g, b, I) <= ep1) && head->Brightness(r, g, b, I)) {
                 Update(NULL, head, r, g, b, time);
                 return;
             }
@@ -188,4 +193,37 @@ struct CodeBook
             }
         }
     };
+
+    pixel_class DetectForeground(int r,int g,int b,int time)
+    {
+        CodeWord *curr,*prev;
+        float I = sqrt(r*r + g*g + b*b);
+        
+        if(head == NULL) {
+            return FOREGROUND;
+        }
+        else {
+            if((head->ColorDist(r, g, b, I) <= ep2) && head->Brightness(r, g, b, I)) {
+                Update(NULL, head, r, g, b, time);
+                return BACKGROUND;
+            }
+
+            if(head->next == NULL) {
+                return FOREGROUND;
+            }
+
+            prev = head;
+            curr = head->next;
+            while(curr != NULL) {
+                if((curr->ColorDist(r, g, b, I) <= ep2) && curr->Brightness(r, g, b, I)) {
+                    Update(prev, curr, r, g, b, time);
+                    return BACKGROUND;
+                }
+                prev = curr;
+                curr = curr->next;
+            }
+            return FOREGROUND;
+        }
+    };
+
 };
