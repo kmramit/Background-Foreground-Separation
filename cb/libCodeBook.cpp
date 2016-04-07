@@ -6,8 +6,8 @@
 
 using namespace std;
 
-// Global constants
-float alpha = 0.5, beta = 1.3, ep1 = 7.0, ep2 = 7.0, Gamma = 0.05, rho = 0.05;
+// Global con0.8nts
+float alpha = 0.95, beta = 1.05, ep1 = 8.0, ep2 = 8.0, Gamma = 0.02, rho = 0.04;
 
 // algo_phase = 0 for training and 1 for testing
 extern int temporal_bound, algo_phase, num_frames;
@@ -57,11 +57,13 @@ struct CodeWord
 
         if(I < I_min) {
             I_min = I;
-            I_hi = min(I_hi, I_min/alpha);
+            I_hi = min(beta*I_max, I_min/alpha);
+            I_lo = alpha*I_max;
         }
         if(I > I_max) {
-            I_max = max(I_max, I);
+            I_max = I;
             I_lo = alpha*I_max;
+            I_hi = min(beta*I_max, I_min/alpha);
         }
         freq++;
         mnrl = max(mnrl, (unsigned short)time - last);
@@ -90,18 +92,23 @@ struct CodeWord
     {
         return ((I >= I_lo) && (I <= I_hi));
     };
+
+    bool DetectionBrightness(int r,int g,int b,float I)
+    {
+        return ((I >= 1.0*I_lo) && (I <= I_hi));
+    };
 };
 
 struct CodeBook
 {
-    CodeWord *head;
+    CodeWord *head[2];
 
-    void Init() { head = NULL; };
+    void Init() { head[0] = head[1] = NULL; };
 
-    int Length()
+    int Length(int layer)
     {
         int len = 0;
-        CodeWord *curr = head;
+        CodeWord *curr = head[layer];
         while(curr != NULL) {
             len++;
             curr = curr->next;
@@ -109,82 +116,82 @@ struct CodeBook
         return len;
     };
 
-    void FindMatch(int r,int g,int b,int time)
+    void FindMatch(int layer,int r,int g,int b,int time)
     {
         CodeWord *curr,*prev;
         float I = sqrt(r*r + g*g + b*b);
         
-        if(head == NULL) {
-            Update(NULL, NULL, r, g, b, time);
+        if(head[layer] == NULL) {
+            Update(layer, NULL, NULL, r, g, b, time);
         }
         else {
-            if((head->AdaptiveColorDist(r, g, b, I) <= ep1) && head->Brightness(r, g, b, I)) {
-                Update(NULL, head, r, g, b, time);
+            if((head[layer]->AdaptiveColorDist(r, g, b, I) <= ep1) && head[layer]->Brightness(r, g, b, I)) {
+                Update(layer, NULL, head[layer], r, g, b, time);
                 return;
             }
 
-            if(head->next == NULL) {
-                Update(NULL, NULL, r, g, b, time);
+            if(head[layer]->next == NULL) {
+                Update(layer, NULL, NULL, r, g, b, time);
                 return;
             }
 
-            prev = head;
-            curr = head->next;
+            prev = head[layer];
+            curr = head[layer]->next;
             while(curr != NULL) {
                 if((curr->AdaptiveColorDist(r, g, b, I) <= ep1) && curr->Brightness(r, g, b, I)) {
-                    Update(prev, curr, r, g, b, time);
+                    Update(layer, prev, curr, r, g, b, time);
                     return;
                 }
                 prev = curr;
                 curr = curr->next;
             }
-            Update(NULL, NULL, r, g, b, time);
+            Update(layer, NULL, NULL, r, g, b, time);
         }
     };
 
-    void Update(CodeWord *prev, CodeWord *curr, int r, int g, int b, int time)
+    void Update(int layer,CodeWord *prev, CodeWord *curr, int r, int g, int b, int time)
     {
         if((prev == NULL) && (curr == NULL)) {
             CodeWord *newWord = (CodeWord *)malloc(sizeof(CodeWord));
             newWord->Init(r, g, b, time);
-            newWord->next = head;
-            head = newWord;
+            newWord->next = head[layer];
+            head[layer] = newWord;
         }
         else if(prev == NULL) {
-            assert(head == curr);
+            assert(head[layer] == curr);
             curr->Update(r, g, b, time);
         }
         else {
             CodeWord *curr = prev->next;
             prev->next = curr->next;
-            curr->next = head;
-            head = curr;
-            head->Update(r, g, b, time);
+            curr->next = head[layer];
+            head[layer] = curr;
+            head[layer]->Update(r, g, b, time);
         }
         return;
     };
 
-    void WrapAround() {
+    void WrapAround(int layer) {
         CodeWord *curr;
-        curr = head;
+        curr = head[layer];
         while(curr != NULL) {
             curr->mnrl = max(curr->mnrl, num_frames - curr->last + curr->first - 1);
             curr = curr->next;
         }
     };
 
-    void TemporalFit()
+    void TemporalFit(int layer)
     {
         CodeWord *valid, *curr, *temp;
 
-        assert(head != NULL);
+        assert(head[layer] != NULL);
 
-        // Find the head of the new linked list which we want to construct
-        curr = head;
+        // Find the head[layer] of the new linked list which we want to construct
+        curr = head[layer];
         while((curr != NULL) && (curr->mnrl > temporal_bound)) {
-            head = head->next;
+            head[layer] = head[layer]->next;
             free(curr);
-            curr = head;
+            curr = head[layer];
         }
         if(curr == NULL)
             return;
@@ -208,34 +215,40 @@ struct CodeBook
         }
     };
 
-    pixel_class DetectForeground(int r,int g,int b,int time)
+    pixel_class DetectForeground(int layer,int r,int g,int b,int time)
     {
         CodeWord *curr,*prev;
         float I = sqrt(r*r + g*g + b*b);
         
-        if(head == NULL) {
+        if(head[layer] == NULL) {
+			if(layer == 1)
+            	Update(layer, NULL, NULL, r, g, b, time);
             return FOREGROUND;
         }
         else {
-            if((head->AdaptiveColorDist(r, g, b, I) <= ep2) && head->Brightness(r, g, b, I)) {
-                Update(NULL, head, r, g, b, time);
+            if((head[layer]->AdaptiveColorDist(r, g, b, I) <= ep2) && head[layer]->DetectionBrightness(r, g, b, I)) {
+                Update(layer, NULL, head[layer], r, g, b, time);
                 return BACKGROUND;
             }
 
-            if(head->next == NULL) {
+            if(head[layer]->next == NULL) {
+				if(layer == 1)
+					Update(layer, NULL, NULL, r, g, b, time);
                 return FOREGROUND;
             }
 
-            prev = head;
-            curr = head->next;
+            prev = head[layer];
+            curr = head[layer]->next;
             while(curr != NULL) {
-                if((curr->AdaptiveColorDist(r, g, b, I) <= ep2) && curr->Brightness(r, g, b, I)) {
-                    Update(prev, curr, r, g, b, time);
+                if((curr->AdaptiveColorDist(r, g, b, I) <= ep2) && curr->DetectionBrightness(r, g, b, I)) {
+                    Update(layer, prev, curr, r, g, b, time);
                     return BACKGROUND;
                 }
                 prev = curr;
                 curr = curr->next;
             }
+			if(layer == 1)
+            	Update(layer, NULL, NULL, r, g, b, time);
             return FOREGROUND;
         }
     };
