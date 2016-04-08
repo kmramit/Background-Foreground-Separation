@@ -5,8 +5,8 @@
  */
 #include <iostream>
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include <opencv2/opencv.hpp>
+//#include <opencv/highgui.h>
 
 #include "vibe-background-sequential.h"
 
@@ -76,7 +76,8 @@ void processVideo(char* videoFilename)
 
   /* Variables. */
   static int frameNumber = 1; /* The current frame number */
-  Mat frame;                  /* Current frame. */
+  Mat inpframe;                  /* Current frame. */
+  Mat frame(480, 640, CV_8UC3);
   Mat segmentationMap;        /* Will contain the segmentation map. This is the binary output map. */
   int keyboard = 0;           /* Input from keyboard. Used to stop the program. Enter 'q' to quit. */
 
@@ -86,11 +87,12 @@ void processVideo(char* videoFilename)
   /* Read input data. ESC or 'q' for quitting. */
   while ((char)keyboard != 'q' && (char)keyboard != 27) {
     // Read the current frame.
-    if (!capture.read(frame)) {
+    if (!capture.read(inpframe)) {
       cerr << "Unable to read next frame." << endl;
       cerr << "Exiting..." << endl;
       exit(EXIT_FAILURE);
     }
+    resize(inpframe, frame, Size(640, 480), 0, 0, INTER_LINEAR);
 
     if ((frameNumber % 100) == 0) { cout << "Frame number = " << frameNumber << endl; }
 
@@ -117,11 +119,37 @@ void processVideo(char* videoFilename)
        used for the Change Detection dataset (see http://www.changedetection.net/ ) 
        is a 5x5 median filter. */
     medianBlur(segmentationMap, segmentationMap, 3); /* 3x3 median filtering */
+/*
+    Mat element = getStructuringElement(MORPH_ELLIPSE, Size(5,5), Point(-1,-1));
+    morphologyEx(segmentationMap, segmentationMap, MORPH_CLOSE, element);
+*/
 
     /* Shows the current frame and the segmentation map. */
-    imshow("Frame", frame);
     imshow("Segmentation by ViBe", segmentationMap);
 
+                vector<vector<Point> > contours;
+                vector<Vec4i> hierarchy;
+
+                findContours( segmentationMap, contours, hierarchy,
+                        CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE );
+
+                vector<vector<Point> > contours_poly( contours.size() );
+                vector<Rect> boundRect( contours.size() );
+
+                RNG rng(12345);
+                for(int i=0 ; (i >= 0) && (i < contours.size()); i = hierarchy[i][0] )
+                {
+                        //approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
+                        //boundRect[i] = boundingRect( Mat(contours_poly[i]) );
+                        boundRect[i] = boundingRect( contours[i] );
+
+                        Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+                        //drawContours( dst1, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+                        if (contourArea(contours[i]) >= 250)
+                                rectangle( frame, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
+                }
+
+    imshow("Frame", frame);
     ++frameNumber;
 
     /* Gets the input from the keyboard. */
