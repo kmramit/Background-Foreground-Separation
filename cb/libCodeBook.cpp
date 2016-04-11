@@ -6,8 +6,10 @@
 
 using namespace std;
 
-// Global con0.8nts
-float alpha = 0.95, beta = 1.05, ep1 = 8.0, ep2 = 8.0, Gamma = 0.02, rho = 0.04;
+// Global constants
+float alpha = 0.90, beta = 1.05, ep1 = 10.0, ep2 = 10.0;// Gamma = 0.02, rho = 0.04;
+//float alpha = 0.95, beta = 1.05, ep1 = 10.0, ep2 = 10.0;// Gamma = 0.02, rho = 0.04;
+//float alpha = 0.95, beta = 1.05, ep1 = 10.0, ep2 = 10.0;// Gamma = 0.02, rho = 0.04;
 
 // algo_phase = 0 for training and 1 for testing
 extern int temporal_bound, algo_phase, num_frames;
@@ -19,7 +21,7 @@ enum pixel_class {
 
 struct CodeWord
 {
-    float R, B, G, I_min, I_max, I_lo, I_hi, I_self, sigma;
+    float R, B, G, I_min, I_max, I_lo, I_hi, I_self;
     int freq, mnrl, first, last;
     CodeWord *next;
 
@@ -34,7 +36,7 @@ struct CodeWord
         mnrl    = time - 1;
         first   = last = time;
         next    = NULL;
-        sigma   = 10.0;         // Do we need to explicitly calculate this and initialise?
+        //sigma   = 10.0;         // Do we need to explicitly calculate this and initialise?
         I_lo    = alpha*I_max;
         I_hi    = min(beta * I_max, I_min/alpha);
         I_self  = I;
@@ -45,15 +47,15 @@ struct CodeWord
         float I = sqrt(r*r + g*g + b*b);
         I_self = sqrt(R*R + G*G + B*B);
 
-        // R = (R * freq + r)/(freq + 1);
-        // G = (G * freq + g)/(freq + 1);
-        // B = (B * freq + b)/(freq + 1);
+        R = (R * freq + r)/(freq + 1);
+        G = (G * freq + g)/(freq + 1);
+        B = (B * freq + b)/(freq + 1);
 
         // Adaptive updation
-        R = Gamma * r + (1 - Gamma)*R;
-        G = Gamma * g + (1 - Gamma)*G;
-        B = Gamma * b + (1 - Gamma)*B;
-        sigma = sqrt(pow(ColorDist(r, g, b, I_self),2)*rho + (1-rho)*pow(sigma,2));
+        //R = Gamma * r + (1 - Gamma)*R;
+        //G = Gamma * g + (1 - Gamma)*G;
+        //B = Gamma * b + (1 - Gamma)*B;
+        //sigma = sqrt(pow(ColorDist(r, g, b, I_self),2)*rho + (1-rho)*pow(sigma,2));
 
         if(I < I_min) {
             I_min = I;
@@ -83,10 +85,12 @@ struct CodeWord
         }
     };
 
+	/*
     float AdaptiveColorDist(int r,int g,int b,float I)
     {
         return ColorDist(r, g, b, I)/sigma;
     }
+	*/
 
     bool Brightness(int r,int g,int b,float I)
     {
@@ -125,7 +129,7 @@ struct CodeBook
             Update(layer, NULL, NULL, r, g, b, time);
         }
         else {
-            if((head[layer]->AdaptiveColorDist(r, g, b, I) <= ep1) && head[layer]->Brightness(r, g, b, I)) {
+            if((head[layer]->ColorDist(r, g, b, I) <= ep1) && head[layer]->Brightness(r, g, b, I)) {
                 Update(layer, NULL, head[layer], r, g, b, time);
                 return;
             }
@@ -138,7 +142,7 @@ struct CodeBook
             prev = head[layer];
             curr = head[layer]->next;
             while(curr != NULL) {
-                if((curr->AdaptiveColorDist(r, g, b, I) <= ep1) && curr->Brightness(r, g, b, I)) {
+                if((curr->ColorDist(r, g, b, I) <= ep1) && curr->Brightness(r, g, b, I)) {
                     Update(layer, prev, curr, r, g, b, time);
                     return;
                 }
@@ -226,7 +230,7 @@ struct CodeBook
             return FOREGROUND;
         }
         else {
-            if((head[layer]->AdaptiveColorDist(r, g, b, I) <= ep2) && head[layer]->DetectionBrightness(r, g, b, I)) {
+            if((head[layer]->ColorDist(r, g, b, I) <= ep2) && head[layer]->DetectionBrightness(r, g, b, I)) {
                 Update(layer, NULL, head[layer], r, g, b, time);
                 return BACKGROUND;
             }
@@ -240,7 +244,7 @@ struct CodeBook
             prev = head[layer];
             curr = head[layer]->next;
             while(curr != NULL) {
-                if((curr->AdaptiveColorDist(r, g, b, I) <= ep2) && curr->DetectionBrightness(r, g, b, I)) {
+                if((curr->ColorDist(r, g, b, I) <= ep2) && curr->DetectionBrightness(r, g, b, I)) {
                     Update(layer, prev, curr, r, g, b, time);
                     return BACKGROUND;
                 }

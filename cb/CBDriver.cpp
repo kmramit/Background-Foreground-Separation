@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <opencv2/opencv.hpp>
 #include "libCodeBook.cpp"
 
@@ -10,13 +11,30 @@ int main(int argc, char* argv[])
 {
     /* Provide your own pathname */
     //VideoCapture cap("../../videos/input_video_sample1.mov");
-    if (argc != 2) {
+    if (argc != 3) {
 	 cerr <<"Incorrect input" << endl;
 	 cerr <<"exiting..." << endl;
 	 return EXIT_FAILURE;
     }
 
+    //VideoCapture tempcap("../../videos/sample5_cut.avi");
     VideoCapture cap(argv[1]);
+
+    Mat frame, frame2;
+    int time = 0,i,j,m;
+    bool ret;
+    /*
+    if(!tempcap.isOpened())
+        return -1;
+
+    printf("Going to frame\n");
+    for(i=0;i<=1500;i++) {
+	ret = tempcap.read(frame);
+	if(!ret)
+	    break;
+    }
+    printf("Frame reached\n");
+    */
 
     if(!cap.isOpened())
         return -1;
@@ -28,15 +46,13 @@ int main(int argc, char* argv[])
     CodeBook codebooks[480][640];
     printf("Codebooks initialised\n");
 
-    int time = 0,i,j,m;
-    Mat frame, frame2;
     int blue, green, red;
     Vec3b intensity;
-    bool ret;
 
     algo_phase = 0;
     for(;;)
     {
+        //ret = tempcap.read(frame);
         ret = cap.read(frame);
         if(!ret)
             break;
@@ -82,13 +98,15 @@ int main(int argc, char* argv[])
 
     printf("Average codewords per codebook = %f\n",(sum*1.0)/(480*640));
 
-    temporal_bound = 9*num_frames/10;
+    temporal_bound = 3*num_frames/4;
 
     sum = 0;
+    bool Noise[480][640];
     for(j=0;j<480;j++) {
         for(i=0;i<640;i++) {
             codebooks[j][i].TemporalFit(0);
             sum += codebooks[j][i].Length(0);
+	    //Noise[j][i] = true;
         }
     }
     printf("Average codewords per codebook (after temporal fitting) = %f\n",(sum*1.0)/(480*640));
@@ -100,6 +118,9 @@ int main(int argc, char* argv[])
     Mat frame3(480, 640, CV_8UC1);
     namedWindow("original",1);
     namedWindow( "Components", 1 );
+    FILE *fp;
+    fp = fopen(argv[2],"w");
+
     //namedWindow("classified",1);
     for(;;)
     {
@@ -119,13 +140,23 @@ int main(int argc, char* argv[])
                 //if((codebooks[j][i].DetectForeground(0, red, green, blue, time) == BACKGROUND) || 
 		//	(codebooks[j][i].DetectForeground(1, red, green, blue, time) == BACKGROUND))
                 if(codebooks[j][i].DetectForeground(0, red, green, blue, time) == FOREGROUND) {
+		    /*
+		    if((Noise[j][i] == true) || (time <= 400)) {
+			if(codebooks[j][i].DetectForeground(1, red, green, blue, time) == BACKGROUND)
+			    frame3.at<uchar>(j, i) = 120;
+			else
+			    frame3.at<uchar>(j, i) = 255;
+		    }
+		    else
+		    */
 		    if(codebooks[j][i].DetectForeground(1, red, green, blue, time) == BACKGROUND)
 			frame3.at<uchar>(j, i) = 120;
 		    else
-                    	frame3.at<uchar>(j, i) = 255;
+			frame3.at<uchar>(j, i) = 255;
 		}
                 else
                     frame3.at<uchar>(j, i) = 0;
+		//Noise[j][i] = true;
             }
         }
         //imshow("classified",frame3);
@@ -134,15 +165,114 @@ int main(int argc, char* argv[])
 	Mat dst1 = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
 	Mat dst2 = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
 	Mat dst3 = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
+	Mat t1 = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
+	Mat omega = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
+	Mat result = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
+	Mat t2 = Mat::zeros(frame3.rows, frame3.cols, CV_8UC1);
 	Mat element = getStructuringElement( MORPH_RECT, Size( 5,5 ), Point( -1,-1 ) );
+	Rect bound;
 	//medianBlur(frame3, frame3, 3); 
-	GaussianBlur(frame3, dst, Size(21,21), 0, 0);
-	morphologyEx( dst, dst1, MORPH_CLOSE, element );
-	threshold(dst1, dst2, 70, 255, THRESH_BINARY);
-	erode( dst2, dst3, element );
-	imshow( "Components", dst3);
-	//dilate(dst1, dst3, element);
+	//GaussianBlur(frame3, dst, Size(21,21), 0, 0);
+	//threshold(dst, dst1, 120, 255, THRESH_BINARY);
+	//morphologyEx( dst1, dst2, MORPH_CLOSE, element );
+	//erode( dst2, dst3, element );
+	//dilate(dst2, dst3, element);
+	//imshow( "Components", dst3);
+	//memset(Noise,true,sizeof(Noise));
+	
+	int p;
+	///////////////////////////////////////////////////////////////////////
+	// Construction of t1
+	vector<vector<Point> > contours;
+	vector<Vec4i> hierarchy;
+	findContours(frame3, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+	vector<vector<Point> >hull( contours.size() );
+	for(i = 0; i < contours.size(); i++ ) {  
+	    //convexHull( Mat(contours[i]), hull[i], false ); 
+	    bound = boundingRect(contours[i]);
+	    if(bound.y >= 320) {
+		if(contourArea(contours[i]) >= 1400)
+		    drawContours( t1, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
+	    }
+	    else {
+		if(contourArea(contours[i]) >= 200)
+		    drawContours( t1, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
+	    }
+	}
 
+	/*
+	for(j = 0;j<480;j++) {
+	    printf("%d\n",j,i);
+	    for(i=0;i<640;i++) {
+		t1.at<uchar>(j, i) = 0;
+		for(p=0; p< contours.size();p++) {
+		    if(pointPolygonTest(hull[p], Point2f(j, i), false) >= 0) {
+			t1.at<uchar>(j, i) = 255;
+			break;
+		    }
+		}
+	    }
+	}
+	*/
+
+	// Apply Sobel edge detector
+	int scale = 1;
+	int delta = 0;
+	int ddepth = CV_16S;
+    	Mat src_gray;
+	Mat grad_x, grad_y;
+	Mat abs_grad_x, abs_grad_y;
+
+	GaussianBlur( frame2, frame2, Size(3,3), 0, 0, BORDER_DEFAULT );
+	cvtColor(frame2, src_gray, CV_BGR2GRAY);
+
+	Sobel( src_gray, grad_x, ddepth, 1, 0, 3, scale, delta, BORDER_DEFAULT );
+	Sobel( src_gray, grad_y, ddepth, 0, 1, 3, scale, delta, BORDER_DEFAULT );	
+
+	convertScaleAbs( grad_x, abs_grad_x );
+	convertScaleAbs( grad_y, abs_grad_y );
+	addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, omega );
+
+	// Construction of t2
+	//vector<vector<Point> > contours;
+	//vector<Vec4i> hierarchy;
+	findContours(omega, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
+	//vector<vector<Point> >hull( contours.size() );
+	for(i = 0; i < contours.size(); i++ ) {  
+	    //convexHull( Mat(contours[i]), hull[i], false ); 
+	    if(contourArea(contours[i]) >= 350)
+		drawContours( t2, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
+	}
+
+	/*
+	for(j = 0;j<480;j++) {
+	    for(i=0;i<640;i++) {
+		t2.at<uchar>(j, i) = 0;
+		for(p=0; p< contours.size();p++) {
+		    if(pointPolygonTest(hull[p], Point2f(j, i), false) >= 0) {
+			t2.at<uchar>(j, i) = 255;
+			break;
+		    }
+		}
+	    }
+	}
+	*/
+
+	// Final intersection
+	for(j=0;j<480;j++) {
+	    for(i=0;i<640;i++) {
+		result.at<uchar>(j, i) = 0;
+		if((t1.at<uchar>(j,i) == 255) && (t2.at<uchar>(j,i) == 255))
+		    result.at<uchar>(j, i) = 255;
+	    }
+	}
+	GaussianBlur(frame3, dst, Size(21,21), 0, 0);
+	morphologyEx( result, result, MORPH_OPEN, element );
+	imshow( "Components", result);
+        imshow("original",frame2);
+	/////////////////////////////////////////////////////////////////////////
+
+	/*---------------------------------------
 		vector<vector<Point> > contours;
 		vector<Vec4i> hierarchy;
 
@@ -151,40 +281,43 @@ int main(int argc, char* argv[])
 
 		vector<vector<Point> > contours_poly( contours.size() );
 		vector<Rect> boundRect( contours.size() );
+		Rect bound;
 
-		RNG rng(12345);
-		int i = 0;
-		for( ; (i >= 0) && (i < contours.size()); i = hierarchy[i][0] )
-		{ 
-			//approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
-			//boundRect[i] = boundingRect( Mat(contours_poly[i]) );
-			boundRect[i] = boundingRect( contours[i] );
-
-			Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-			//drawContours( dst1, contours_poly, (int)i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-			if (contourArea(contours[i]) >= 200)
-				rectangle( frame2, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
+		int p,q;
+		double area;
+		vector<Rect> boundRectFiltered;
+		for(i=0; (i>=0) && (i<contours.size());i=hierarchy[i][0]) {
+		    bound = boundingRect(contours[i]);
+		    area = contourArea(contours[i]);
+		    if((bound.y >= 240)) {
+			if(area >= 1600)
+			    boundRectFiltered.push_back(bound);
+		    }
+		    else if(area >= 150) {
+			boundRectFiltered.push_back(bound);
+		    }
 		}
-		//namedWindow( "Contours", WINDOW_AUTOSIZE );
-		//imshow( "Contours", drawing );
 
+		Scalar color = Scalar( 255, 255, 255 );
+	--------------------------------*/
 		/*
-		// iterate through all the top-level contours,
-		// draw each connected component with its own random color
-		int idx = 0;
-		for( ; (idx >= 0) && (contours.size()>0); idx = hierarchy[idx][0] )
-		{
-			Scalar color( rand()&255, rand()&255, rand()&255 );
-			drawContours( dst, contours, idx, color, CV_FILLED, 8, hierarchy );
-		}
+		if(boundRectFiltered.size())
+		    fprintf(fp,"%d 1",(time-500));
+		else
+		    fprintf(fp,"%d 0",(time-500));
 		*/
+	/*---------------------
+		for(int i=0;i<boundRectFiltered.size(); i++) {
+		    //if(time >= 400)
+		//	fprintf(fp,"%d,%d,%d,%d,%d\n",time,boundRectFiltered[i].x,boundRectFiltered[i].y,boundRectFiltered[i].width,boundRectFiltered[i].height);
+		    rectangle(frame2, boundRectFiltered[i].tl(), boundRectFiltered[i].br(), color, 2, 8 ,0);
+		}
 
-
-        imshow("original",frame2);
-        if(waitKey(30) >= 0)
+	------------------------*/
+        if(waitKey(20) >= 0)
             break;
 
-	if(time % 100 == 0)
+	if(time % 100 == 1)
 		printf("Frame %d\n", time);
         time++;
     }

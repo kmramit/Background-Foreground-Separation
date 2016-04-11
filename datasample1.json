@@ -1,0 +1,1219 @@
+[
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 58.0,
+                "width": 27.0,
+                "x": 218.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 55.0,
+                "width": 22.0,
+                "x": 169.0,
+                "y": 16.0
+            },
+            {
+                "class": "rect",
+                "height": 30.0,
+                "width": 15.0,
+                "x": 201.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 17.0,
+                "width": 40.0,
+                "x": 234.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "frame_604.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 55.0,
+                "width": 22.0,
+                "x": 168.0,
+                "y": 16.0
+            },
+            {
+                "class": "rect",
+                "height": 62.0,
+                "width": 33.0,
+                "x": 223.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 31.0,
+                "width": 15.0,
+                "x": 203.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 15.0,
+                "width": 48.0,
+                "x": 227.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "frame_613.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 54.0,
+                "width": 27.0,
+                "x": 176.0,
+                "y": 13.0
+            },
+            {
+                "class": "rect",
+                "height": 27.0,
+                "width": 18.0,
+                "x": 201.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 37.0,
+                "width": 44.0,
+                "x": 226.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_645.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 54.0,
+                "width": 20.0,
+                "x": 180.0,
+                "y": 10.0
+            },
+            {
+                "class": "rect",
+                "height": 26.0,
+                "width": 17.0,
+                "x": 201.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 32.0,
+                "width": 40.0,
+                "x": 228.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_652.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 53.0,
+                "width": 22.0,
+                "x": 179.0,
+                "y": 8.0
+            },
+            {
+                "class": "rect",
+                "height": 25.0,
+                "width": 18.0,
+                "x": 202.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 28.0,
+                "width": 41.0,
+                "x": 226.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_661.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 50.0,
+                "width": 19.0,
+                "x": 179.0,
+                "y": 9.0
+            },
+            {
+                "class": "rect",
+                "height": 25.0,
+                "width": 15.0,
+                "x": 202.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 26.0,
+                "width": 39.0,
+                "x": 227.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_664.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 52.0,
+                "width": 18.0,
+                "x": 181.0,
+                "y": 8.0
+            },
+            {
+                "class": "rect",
+                "height": 26.0,
+                "width": 18.0,
+                "x": 201.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 28.0,
+                "width": 40.0,
+                "x": 226.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_662.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 251.0,
+                "width": 111.0,
+                "x": 52.0,
+                "y": 136.0
+            },
+            {
+                "class": "rect",
+                "height": 49.0,
+                "width": 22.0,
+                "x": 177.0,
+                "y": 5.0
+            },
+            {
+                "class": "rect",
+                "height": 28.0,
+                "width": 15.0,
+                "x": 204.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 19.0,
+                "width": 13.0,
+                "x": 253.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_687.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 174.0,
+                "width": 97.0,
+                "x": 125.0,
+                "y": 84.0
+            },
+            {
+                "class": "rect",
+                "height": 44.0,
+                "width": 20.0,
+                "x": 177.0,
+                "y": 5.0
+            },
+            {
+                "class": "rect",
+                "height": 24.0,
+                "width": 16.0,
+                "x": 203.0,
+                "y": -1.0
+            },
+            {
+                "class": "rect",
+                "height": 15.0,
+                "width": 13.0,
+                "x": 254.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_703.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 130.0,
+                "width": 79.0,
+                "x": 175.0,
+                "y": 55.0
+            },
+            {
+                "class": "rect",
+                "height": 44.0,
+                "width": 19.0,
+                "x": 181.0,
+                "y": 3.0
+            },
+            {
+                "class": "rect",
+                "height": 20.0,
+                "width": 12.0,
+                "x": 209.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 11.0,
+                "width": 13.0,
+                "x": 253.0,
+                "y": 2.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_719.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 122.0,
+                "width": 75.0,
+                "x": 182.0,
+                "y": 53.0
+            },
+            {
+                "class": "rect",
+                "height": 46.0,
+                "width": 16.0,
+                "x": 183.0,
+                "y": 4.0
+            },
+            {
+                "class": "rect",
+                "height": 25.0,
+                "width": 10.0,
+                "x": 209.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 14.0,
+                "width": 12.0,
+                "x": 252.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_722.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 91.0,
+                "width": 56.0,
+                "x": 227.0,
+                "y": 16.0
+            },
+            {
+                "class": "rect",
+                "height": 45.0,
+                "width": 17.0,
+                "x": 183.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 21.0,
+                "width": 11.0,
+                "x": 210.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 10.0,
+                "width": 14.0,
+                "x": 240.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_753.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 74.0,
+                "width": 48.0,
+                "x": 243.0,
+                "y": 5.0
+            },
+            {
+                "class": "rect",
+                "height": 42.0,
+                "width": 17.0,
+                "x": 183.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 19.0,
+                "width": 12.0,
+                "x": 210.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 9.0,
+                "width": 11.0,
+                "x": 232.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_771.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 70.0,
+                "width": 42.0,
+                "x": 248.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 42.0,
+                "width": 14.0,
+                "x": 183.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 21.0,
+                "width": 11.0,
+                "x": 210.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 12.0,
+                "width": 11.0,
+                "x": 229.0,
+                "y": -1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_776.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 68.0,
+                "width": 40.0,
+                "x": 248.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 43.0,
+                "width": 16.0,
+                "x": 183.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 16.0,
+                "width": 14.0,
+                "x": 209.0,
+                "y": 2.0
+            },
+            {
+                "class": "rect",
+                "height": 7.0,
+                "width": 15.0,
+                "x": 228.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_777.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 139.0,
+                "width": 105.0,
+                "x": 417.0,
+                "y": 25.0
+            },
+            {
+                "class": "rect",
+                "height": 113.0,
+                "width": 108.0,
+                "x": 1.0,
+                "y": 366.0
+            },
+            {
+                "class": "rect",
+                "height": 71.0,
+                "width": 30.0,
+                "x": 105.0,
+                "y": 55.0
+            },
+            {
+                "class": "rect",
+                "height": 53.0,
+                "width": 19.0,
+                "x": 191.0,
+                "y": -2.0
+            },
+            {
+                "class": "rect",
+                "height": 38.0,
+                "width": 20.0,
+                "x": 213.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 9.0,
+                "width": 11.0,
+                "x": 243.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_402.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 266.0,
+                "width": 210.0,
+                "x": 0.0,
+                "y": 207.0
+            },
+            {
+                "class": "rect",
+                "height": 158.0,
+                "width": 119.0,
+                "x": 440.0,
+                "y": 32.0
+            },
+            {
+                "class": "rect",
+                "height": 70.0,
+                "width": 28.0,
+                "x": 109.0,
+                "y": 53.0
+            },
+            {
+                "class": "rect",
+                "height": 48.0,
+                "width": 35.0,
+                "x": 192.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 11.0,
+                "width": 15.0,
+                "x": 238.0,
+                "y": -1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_414.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 239.0,
+                "width": 221.0,
+                "x": 38.0,
+                "y": 113.0
+            },
+            {
+                "class": "rect",
+                "height": 176.0,
+                "width": 118.0,
+                "x": 479.0,
+                "y": 45.0
+            },
+            {
+                "class": "rect",
+                "height": 66.0,
+                "width": 27.0,
+                "x": 112.0,
+                "y": 47.0
+            },
+            {
+                "class": "rect",
+                "height": 45.0,
+                "width": 26.0,
+                "x": 194.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 8.0,
+                "width": 12.0,
+                "x": 227.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_431.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 202.0,
+                "width": 196.0,
+                "x": 75.0,
+                "y": 93.0
+            },
+            {
+                "class": "rect",
+                "height": 53.0,
+                "width": 21.0,
+                "x": 118.0,
+                "y": 47.0
+            },
+            {
+                "class": "rect",
+                "height": 48.0,
+                "width": 29.0,
+                "x": 193.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 188.0,
+                "width": 128.0,
+                "x": 495.0,
+                "y": 53.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_437.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 195.0,
+                "width": 191.0,
+                "x": 82.0,
+                "y": 91.0
+            },
+            {
+                "class": "rect",
+                "height": 45.0,
+                "width": 23.0,
+                "x": 118.0,
+                "y": 47.0
+            },
+            {
+                "class": "rect",
+                "height": 46.0,
+                "width": 27.0,
+                "x": 193.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 186.0,
+                "width": 127.0,
+                "x": 498.0,
+                "y": 54.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_438.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 170.0,
+                "width": 170.0,
+                "x": 110.0,
+                "y": 76.0
+            },
+            {
+                "class": "rect",
+                "height": 202.0,
+                "width": 121.0,
+                "x": 514.0,
+                "y": 58.0
+            },
+            {
+                "class": "rect",
+                "height": 43.0,
+                "width": 31.0,
+                "x": 192.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 43.0,
+                "width": 26.0,
+                "x": 119.0,
+                "y": 44.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_444.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 162.0,
+                "width": 164.0,
+                "x": 119.0,
+                "y": 72.0
+            },
+            {
+                "class": "rect",
+                "height": 202.0,
+                "width": 116.0,
+                "x": 518.0,
+                "y": 61.0
+            },
+            {
+                "class": "rect",
+                "height": 44.0,
+                "width": 29.0,
+                "x": 193.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 54.0,
+                "width": 25.0,
+                "x": 120.0,
+                "y": 42.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_446.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 152.0,
+                "width": 159.0,
+                "x": 128.0,
+                "y": 65.0
+            },
+            {
+                "class": "rect",
+                "height": 216.0,
+                "width": 115.0,
+                "x": 524.0,
+                "y": 65.0
+            },
+            {
+                "class": "rect",
+                "height": 44.0,
+                "width": 34.0,
+                "x": 192.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 62.0,
+                "width": 24.0,
+                "x": 122.0,
+                "y": 43.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_449.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 144.0,
+                "width": 150.0,
+                "x": 138.0,
+                "y": 60.0
+            },
+            {
+                "class": "rect",
+                "height": 220.0,
+                "width": 107.0,
+                "x": 532.0,
+                "y": 69.0
+            },
+            {
+                "class": "rect",
+                "height": 66.0,
+                "width": 24.0,
+                "x": 125.0,
+                "y": 42.0
+            },
+            {
+                "class": "rect",
+                "height": 45.0,
+                "width": 33.0,
+                "x": 192.0,
+                "y": -1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_452.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 125.0,
+                "width": 136.0,
+                "x": 159.0,
+                "y": 49.0
+            },
+            {
+                "class": "rect",
+                "height": 69.0,
+                "width": 21.0,
+                "x": 127.0,
+                "y": 39.0
+            },
+            {
+                "class": "rect",
+                "height": 41.0,
+                "width": 34.0,
+                "x": 193.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 213.0,
+                "width": 87.0,
+                "x": 553.0,
+                "y": 81.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_459.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 112.0,
+                "width": 116.0,
+                "x": 179.0,
+                "y": 35.0
+            },
+            {
+                "class": "rect",
+                "height": 70.0,
+                "width": 25.0,
+                "x": 130.0,
+                "y": 38.0
+            },
+            {
+                "class": "rect",
+                "height": 39.0,
+                "width": 32.0,
+                "x": 193.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 220.0,
+                "width": 54.0,
+                "x": 586.0,
+                "y": 95.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_468.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 106.0,
+                "width": 104.0,
+                "x": 187.0,
+                "y": 30.0
+            },
+            {
+                "class": "rect",
+                "height": 67.0,
+                "width": 26.0,
+                "x": 131.0,
+                "y": 35.0
+            },
+            {
+                "class": "rect",
+                "height": 38.0,
+                "width": 34.0,
+                "x": 193.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 202.0,
+                "width": 33.0,
+                "x": 606.0,
+                "y": 108.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_472.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 267.0,
+                "width": 99.0,
+                "x": -1.0,
+                "y": 143.0
+            },
+            {
+                "class": "rect",
+                "height": 64.0,
+                "width": 24.0,
+                "x": 142.0,
+                "y": 31.0
+            },
+            {
+                "class": "rect",
+                "height": 39.0,
+                "width": 31.0,
+                "x": 193.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 70.0,
+                "width": 76.0,
+                "x": 228.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_506.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 195.0,
+                "width": 92.0,
+                "x": 62.0,
+                "y": 103.0
+            },
+            {
+                "class": "rect",
+                "height": 65.0,
+                "width": 23.0,
+                "x": 147.0,
+                "y": 28.0
+            },
+            {
+                "class": "rect",
+                "height": 58.0,
+                "width": 64.0,
+                "x": 233.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 41.0,
+                "width": 25.0,
+                "x": 195.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_518.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 147.0,
+                "width": 81.0,
+                "x": 112.0,
+                "y": 78.0
+            },
+            {
+                "class": "rect",
+                "height": 40.0,
+                "width": 21.0,
+                "x": 195.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 58.0,
+                "width": 22.0,
+                "x": 153.0,
+                "y": 27.0
+            },
+            {
+                "class": "rect",
+                "height": 44.0,
+                "width": 67.0,
+                "x": 238.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_530.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 142.0,
+                "width": 78.0,
+                "x": 117.0,
+                "y": 73.0
+            },
+            {
+                "class": "rect",
+                "height": 62.0,
+                "width": 22.0,
+                "x": 152.0,
+                "y": 24.0
+            },
+            {
+                "class": "rect",
+                "height": 37.0,
+                "width": 23.0,
+                "x": 194.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 42.0,
+                "width": 68.0,
+                "x": 237.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_533.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 120.0,
+                "width": 67.0,
+                "x": 147.0,
+                "y": 57.0
+            },
+            {
+                "class": "rect",
+                "height": 50.0,
+                "width": 18.0,
+                "x": 157.0,
+                "y": 25.0
+            },
+            {
+                "class": "rect",
+                "height": 38.0,
+                "width": 21.0,
+                "x": 196.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 38.0,
+                "width": 59.0,
+                "x": 240.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_544.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 116.0,
+                "width": 66.0,
+                "x": 152.0,
+                "y": 53.0
+            },
+            {
+                "class": "rect",
+                "height": 53.0,
+                "width": 19.0,
+                "x": 157.0,
+                "y": 23.0
+            },
+            {
+                "class": "rect",
+                "height": 35.0,
+                "width": 20.0,
+                "x": 196.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 34.0,
+                "width": 58.0,
+                "x": 240.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_547.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 56.0,
+                "width": 22.0,
+                "x": 161.0,
+                "y": 21.0
+            },
+            {
+                "class": "rect",
+                "height": 94.0,
+                "width": 54.0,
+                "x": 186.0,
+                "y": 28.0
+            },
+            {
+                "class": "rect",
+                "height": 28.0,
+                "width": 51.0,
+                "x": 240.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 36.0,
+                "width": 19.0,
+                "x": 198.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_567.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 52.0,
+                "width": 24.0,
+                "x": 166.0,
+                "y": 19.0
+            },
+            {
+                "class": "rect",
+                "height": 75.0,
+                "width": 44.0,
+                "x": 210.0,
+                "y": 9.0
+            },
+            {
+                "class": "rect",
+                "height": 30.0,
+                "width": 17.0,
+                "x": 200.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 19.0,
+                "width": 43.0,
+                "x": 233.0,
+                "y": 0.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_592.png"
+    },
+    {
+        "annotations": [
+            {
+                "class": "rect",
+                "height": 44.0,
+                "width": 18.0,
+                "x": 182.0,
+                "y": 0.0
+            },
+            {
+                "class": "rect",
+                "height": 21.0,
+                "width": 9.0,
+                "x": 210.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 5.0,
+                "width": 10.0,
+                "x": 223.0,
+                "y": 1.0
+            },
+            {
+                "class": "rect",
+                "height": 53.0,
+                "width": 25.0,
+                "x": 252.0,
+                "y": 1.0
+            }
+        ],
+        "class": "image",
+        "filename": "annotations/datasample1/frame_787.png"
+    }
+]
