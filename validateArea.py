@@ -23,10 +23,10 @@ def FrameArea(framedat):
         area += box[2]*box[3]*1.0
     return area
 
-fp = open(sys.argv[1]+'.json','r')
+fp = open(sys.argv[2],'r')
 out = json.loads(fp.read())
 
-fp2 = open(sys.argv[1]+'.txt','r')
+fp2 = open(sys.argv[1],'r')
 boxes = fp2.read().split('\n')
 
 frames = []
@@ -63,7 +63,7 @@ denom = 0
 for frame in corrBoxes:
     if frame in reqBoxes:
         numer += frameIntersection(corrBoxes[frame], reqBoxes[frame]) 
-        denom += FrameArea(reqBoxes[frame])
+        denom += FrameArea(corrBoxes[frame])
         val = frameIntersection(corrBoxes[frame], reqBoxes[frame])/FrameArea(corrBoxes[frame])
         print "Frame %d: %lf"%(frame, val)
         accuracy += val

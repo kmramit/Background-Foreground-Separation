@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
         }
 
         time++;
-        if(time == 500)
+        if(time == 600)
             break;
     }
     //cap.release();
@@ -116,8 +116,8 @@ int main(int argc, char* argv[])
     /////////////////////
 
     Mat frame3(480, 640, CV_8UC1);
-    namedWindow("original",1);
-    namedWindow( "Components", 1 );
+    //namedWindow("original",1);
+    //namedWindow( "Components", 1 );
     FILE *fp;
     fp = fopen(argv[2],"w");
 
@@ -172,11 +172,11 @@ int main(int argc, char* argv[])
 	Mat element = getStructuringElement( MORPH_RECT, Size( 5,5 ), Point( -1,-1 ) );
 	Rect bound;
 	//medianBlur(frame3, frame3, 3); 
-	//GaussianBlur(frame3, dst, Size(21,21), 0, 0);
-	//threshold(dst, dst1, 120, 255, THRESH_BINARY);
-	//morphologyEx( dst1, dst2, MORPH_CLOSE, element );
+	GaussianBlur(frame3, frame3, Size(21,21), 0, 0);
+	threshold(frame3, frame3, 120, 255, THRESH_BINARY);
+	morphologyEx( frame3, frame3, MORPH_CLOSE, element );
 	//erode( dst2, dst3, element );
-	//dilate(dst2, dst3, element);
+	dilate(frame3, frame3, element);
 	//imshow( "Components", dst3);
 	//memset(Noise,true,sizeof(Noise));
 	
@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
 	    //convexHull( Mat(contours[i]), hull[i], false ); 
 	    bound = boundingRect(contours[i]);
 	    if(bound.y >= 320) {
-		if(contourArea(contours[i]) >= 1400)
+		if(contourArea(contours[i]) >= 1600)
 		    drawContours( t1, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
 	    }
 	    else {
@@ -199,21 +199,6 @@ int main(int argc, char* argv[])
 		    drawContours( t1, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
 	    }
 	}
-
-	/*
-	for(j = 0;j<480;j++) {
-	    printf("%d\n",j,i);
-	    for(i=0;i<640;i++) {
-		t1.at<uchar>(j, i) = 0;
-		for(p=0; p< contours.size();p++) {
-		    if(pointPolygonTest(hull[p], Point2f(j, i), false) >= 0) {
-			t1.at<uchar>(j, i) = 255;
-			break;
-		    }
-		}
-	    }
-	}
-	*/
 
 	// Apply Sobel edge detector
 	int scale = 1;
@@ -234,29 +219,20 @@ int main(int argc, char* argv[])
 	addWeighted( abs_grad_x, 0.5, abs_grad_y, 0.5, 0, omega );
 
 	// Construction of t2
-	//vector<vector<Point> > contours;
-	//vector<Vec4i> hierarchy;
 	findContours(omega, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 	//vector<vector<Point> >hull( contours.size() );
 	for(i = 0; i < contours.size(); i++ ) {  
 	    //convexHull( Mat(contours[i]), hull[i], false ); 
-	    if(contourArea(contours[i]) >= 350)
-		drawContours( t2, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
-	}
-
-	/*
-	for(j = 0;j<480;j++) {
-	    for(i=0;i<640;i++) {
-		t2.at<uchar>(j, i) = 0;
-		for(p=0; p< contours.size();p++) {
-		    if(pointPolygonTest(hull[p], Point2f(j, i), false) >= 0) {
-			t2.at<uchar>(j, i) = 255;
-			break;
-		    }
-		}
+	    bound = boundingRect(contours[i]);
+	    if(bound.y >= 320) {
+		if(contourArea(contours[i]) >= 1600)
+		    drawContours( t2, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
+	    }
+	    else {
+		if(contourArea(contours[i]) >= 200)
+		    drawContours( t2, contours, i, Scalar(255), CV_FILLED, 8 ,vector<Vec4i>(), 0, Point());
 	    }
 	}
-	*/
 
 	// Final intersection
 	for(j=0;j<480;j++) {
@@ -267,23 +243,18 @@ int main(int argc, char* argv[])
 	    }
 	}
 	GaussianBlur(frame3, dst, Size(21,21), 0, 0);
-	morphologyEx( result, result, MORPH_OPEN, element );
-	imshow( "Components", result);
-        imshow("original",frame2);
+	morphologyEx( result, result, MORPH_CLOSE, element );
+	dilate(result, result, element);
+	//imshow( "Components", result);
 	/////////////////////////////////////////////////////////////////////////
 
-	/*---------------------------------------
-		vector<vector<Point> > contours;
-		vector<Vec4i> hierarchy;
 
-		findContours( dst3, contours, hierarchy,
+		findContours( result, contours, hierarchy,
 			CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE );
 
 		vector<vector<Point> > contours_poly( contours.size() );
 		vector<Rect> boundRect( contours.size() );
-		Rect bound;
 
-		int p,q;
 		double area;
 		vector<Rect> boundRectFiltered;
 		for(i=0; (i>=0) && (i<contours.size());i=hierarchy[i][0]) {
@@ -299,23 +270,15 @@ int main(int argc, char* argv[])
 		}
 
 		Scalar color = Scalar( 255, 255, 255 );
-	--------------------------------*/
-		/*
-		if(boundRectFiltered.size())
-		    fprintf(fp,"%d 1",(time-500));
-		else
-		    fprintf(fp,"%d 0",(time-500));
-		*/
-	/*---------------------
-		for(int i=0;i<boundRectFiltered.size(); i++) {
-		    //if(time >= 400)
-		//	fprintf(fp,"%d,%d,%d,%d,%d\n",time,boundRectFiltered[i].x,boundRectFiltered[i].y,boundRectFiltered[i].width,boundRectFiltered[i].height);
+		for(i=0;i<boundRectFiltered.size(); i++) {
+		    if(time >= 600)
+			fprintf(fp,"%d,%d,%d,%d,%d\n",time,boundRectFiltered[i].x,boundRectFiltered[i].y,boundRectFiltered[i].width,boundRectFiltered[i].height);
 		    rectangle(frame2, boundRectFiltered[i].tl(), boundRectFiltered[i].br(), color, 2, 8 ,0);
 		}
 
-	------------------------*/
-        if(waitKey(20) >= 0)
-            break;
+        //imshow("original",frame2);
+        //if(waitKey(30) >= 0)
+        //    break;
 
 	if(time % 100 == 1)
 		printf("Frame %d\n", time);
