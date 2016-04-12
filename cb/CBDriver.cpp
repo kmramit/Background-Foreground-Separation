@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	 return EXIT_FAILURE;
     }
 
-    //VideoCapture tempcap("../../videos/sample5_cut.avi");
+    //VideoCapture tempcap(argv[1]);
     VideoCapture cap(argv[1]);
 
     Mat frame, frame2;
@@ -28,14 +28,13 @@ int main(int argc, char* argv[])
         return -1;
 
     printf("Going to frame\n");
-    for(i=0;i<=1500;i++) {
+    for(i=0;i<=820;i++) {
 	ret = tempcap.read(frame);
 	if(!ret)
 	    break;
     }
     printf("Frame reached\n");
     */
-
     if(!cap.isOpened())
         return -1;
 
@@ -76,7 +75,7 @@ int main(int argc, char* argv[])
         }
 
         time++;
-        if(time == 600)
+        if(time == 400)
             break;
     }
     //cap.release();
@@ -140,15 +139,6 @@ int main(int argc, char* argv[])
                 //if((codebooks[j][i].DetectForeground(0, red, green, blue, time) == BACKGROUND) || 
 		//	(codebooks[j][i].DetectForeground(1, red, green, blue, time) == BACKGROUND))
                 if(codebooks[j][i].DetectForeground(0, red, green, blue, time) == FOREGROUND) {
-		    /*
-		    if((Noise[j][i] == true) || (time <= 400)) {
-			if(codebooks[j][i].DetectForeground(1, red, green, blue, time) == BACKGROUND)
-			    frame3.at<uchar>(j, i) = 120;
-			else
-			    frame3.at<uchar>(j, i) = 255;
-		    }
-		    else
-		    */
 		    if(codebooks[j][i].DetectForeground(1, red, green, blue, time) == BACKGROUND)
 			frame3.at<uchar>(j, i) = 120;
 		    else
@@ -270,17 +260,23 @@ int main(int argc, char* argv[])
 		}
 
 		Scalar color = Scalar( 255, 255, 255 );
+		/*
+		if(boundRectFiltered.size())
+		    fprintf(fp,"%d 1\n",time-250);	
+		else
+		    fprintf(fp,"%d 0\n",time-250);	
+		*/
 		for(i=0;i<boundRectFiltered.size(); i++) {
 		    if(time >= 600)
 			fprintf(fp,"%d,%d,%d,%d,%d\n",time,boundRectFiltered[i].x,boundRectFiltered[i].y,boundRectFiltered[i].width,boundRectFiltered[i].height);
 		    rectangle(frame2, boundRectFiltered[i].tl(), boundRectFiltered[i].br(), color, 2, 8 ,0);
 		}
 
-        //imshow("original",frame2);
-        //if(waitKey(30) >= 0)
-        //    break;
+        imshow("original",frame2);
+        if(waitKey(30) >= 0)
+            break;
 
-	if(time % 100 == 1)
+	if(time % 100 == 0)
 		printf("Frame %d\n", time);
         time++;
     }
