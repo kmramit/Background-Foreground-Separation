@@ -31,9 +31,13 @@ Under the guidance of\\
 
 \end{center}
 \end{titlepage}
-% \begin{abstract}
-
-% \end{abstract} 
+\begin{abstract}
+Project is being submitted as the CS771 course project under guidance of Prof Harish Karnick. 
+The purpose is to classify the frames as background or foreground with close to perfection.
+In this report, we provide the results of the various algorithms we tried to achieve better accuracy.
+We first tried standard OpenCV MOG library that resulted in about 92\% accuracy after suitably processing the input frames. Then we shifted to Vibe algorithm which lead to rapid increase in accuracy to about 98\%. Then we implemented the CodeBook Algorithm proposed by Kyungnam Kim and applied certain parameters tweeks to increase accuracy level to 98.37\%.
+Observaing the problems in Coodbook we tried to apply edge detection operator on Coodbook results to further enhance the accuracy. Even though the accuracy level improved but the average frame rate fell dramaticaly that lead us to discard the improvement. 
+\end{abstract} 
 % \section{Motivation}
 \section*{Algorithms Tried:}
 \subsection*{MOG (Mixture Of Gaussians)}
