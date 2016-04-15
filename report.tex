@@ -42,7 +42,7 @@ Observaing the problems in Coodbook we tried to apply edge detection operator on
 \section*{Algorithms Tried:}
 \subsection*{MOG (Mixture Of Gaussians)}
 MOG characterise each pixel by its intensity in the RGB space.The probability of observing a pixel is modelled using a mixture of Gaussian distributions.For each new incoming pixel, the Mahalanobis distance to the distibution is calculated and depending on the threshold, the incoming pixel is classified as background or foreground.In practice, the unmodified output of MOG gives pretty noisy results whereas after blurring the output frame followed by erosion and dilation to we get better contours. 
-\subsubsection{Difficulties}
+\subsubsection{Drawbacks}
 \begin{itemize}
 \item {\bf Foreground Aperture problem:}With backgrounds having fast variations, it becomes difficult to model properly modelled using a few Gaussians.To counter this, if the model is approximated by a large number of Gaussians then slow moving foreground pixels are absorbed into the background resulting in a high false negative rate. 
 \item {\bf Shadow problem:}Shadows due to objects outside the frame lead to mis-classification of frames as foreground. And if we tend to remove the shadow Mog tend to remove the entire object on which the shadow falls leading to some foreground frame being classified as back-ground.
@@ -50,6 +50,7 @@ MOG characterise each pixel by its intensity in the RGB space.The probability of
 \subsection*{ViBe}
 Vibe is a standard background subtraction algorithm that extracts background features and information from moving frames.
 For each pixel values in the past at  its location are stored to maintain adn develop  history model.Now when we need to classify a pixel, we create a sphere of radius R centered a the location. A pixel is classified as background if the number of samples enclosed in the sphere corresponding to its model are greater than a threshold value.Finally, when the pixel is found to be part of the background, its value is propagated into the background model of a neighboring pixel. 
+\subsection{Drawbacks}
 \begin{itemize}
 \item {\bf Stop targets:}If a moving target stops in the field of view for a long time it sends the the target into background thereby misclassifying the frame.
 \item {\bf Broken targets:} Splitting the entire target into several pieces because of some parts of target very similar to the background.This leads to quite low bounding box-accuracy  
@@ -57,27 +58,47 @@ For each pixel values in the past at  its location are stored to maintain adn de
 
 \subsection*{CodeBook Algorithm}
 CodeBook algorithm works in two phases, namely learning phase and update phase.Sample background values at each pixel are quantized into codebooks which represent a compressed form of background model much like the bag-of-words representation in text sequences.This helps in capturing background variation due to periodic like motion over a long spam of time with limited memory being used.One of the advantages over other algorithm is that it does not need to be trained on strictly empty frames.Can somewhat handle illumination variations and moving backgrounds but this is better handled using Layered Model Detection.
+\subsubsection*{Drawbacks}
 \begin{itemize}
 \item {\bf Poor Frame Rate:}CodeBook has quite poor frame rate of 8-9 frames/sec as compared to MOG 20 frames/sec and Vibe
 33 frames/sec. 
 \item {\bf Broken targets:} For example. a man's head and a man's body were sometimes detected in separate contours which caused breaking of the bounding boxes. But the splitting was low as compared to Vibe.
 \end{itemize} 
 
-\section*{CodeBook And its improvement}
+\section*{Improving CodeBook}
 \subsection*{Layered Model Detection(Cache based detection)}
-While testing, a cache model (as mentioned in the paper by Kim et al.) is maintained in addition to the original background model generated during training. This helps in detecting foreground objects against new
-backgrounds which were obtained during the detection phase.For this we define an additional cache model and for each incoming pixel at detection time we try to matching codeword in original training model, if fails then we try in this cache model and if even not in cache we add it in the cache model. Then we filter the codewords in cache and keep the ones that stay for a long time. 
+While testing, a cache model (as mentioned in the paper by Kim et al.) is maintained in addition to the original background model generated during training. This helps
+backgrounds which were obtained during the detection phase.For this we define an additional cache model and for each incoming pixel at detection time we try to matchin
 \begin{itemize}
-\item Another way to handle the problem of noisy bounding boxes due to movement of shadows. 
+\item Another way to handle the problem of noisy bounding boxes due to movement of shadows.
 \item Results in movement of small stationary foreground pixels into the background thereby drastically reducing the noise.
 \end{itemize}
 
 \subsection*{Combining codebook's result with an edge detection operator}
 The result of the codebook algorithm is combined with an edge detection algorithm (we used Sobel operator).
-The main idea is to highlight the boundaries of objects in a scene.This usage of an edge detector will verify if foreground pixels detected by the codebook algorithm belongs to an object or not.The increase in box-bounding accuracy was quite noticeable but we had to discard this improvement as the overhead of slower frame rate was much high as compared to the improvement achieved. 
+The main idea is to highlight the boundaries of objects in a scene.This usage of an edge detector will verify if foreground pixels detected by the codebook algorithm b
 \begin{itemize}
 \item We observed an improvement of (~ 5-7 \%) over the basic codebook algorithm.
 \item We obtained an interesting result when working on convex hulls of the contours instead of directly drawing the bounding rectangle of a contour.
+\end{itemize}
+
+\section*{Problems faced and their workarounds made}
+\subsection*{Implementation level problems}
+\begin{itemize}
+\item We coded up the CodeBook algorithm on our own
+\item \textbf{Problem} : We initially coded up the algorithm in Python but it gave an extremely poor frame rate of 30 frames per minute. This is due to the dynamic typing of python and high overhead associated with the operations on lists and dicitionaries. 
+\item \textbf{Solution} : We then switched over to C/C++ which significantly improved the frame rate to 8-9 frames per second. Not too heavy on the size of the codebase (close to 500 lines of code)
+\end{itemize}
+
+\subsection*{Presence of Noisy contours}
+\begin{itemize}
+\item \textbf{Problem} : Movement of shadows of trees, illumination changes and shaking of leaves started generating contours of their own.
+\item \textbf{Solution}
+    \begin{itemize}
+    \item All the video is such that no video can have small contours very close to the camera. In fact, these contours are usually due to the movement of the shadows formed by the leaves.
+    \item So we increased the minimum area of contours to be drawn close to the camera.
+    \item The number of noisy contours detected was drastically reduced.
+    \end{itemize}
 \end{itemize}
 
 \end{document}
