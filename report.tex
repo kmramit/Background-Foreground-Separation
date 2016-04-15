@@ -63,6 +63,21 @@ CodeBook algorithm works in two phases, namely learning phase and update phase.S
 \item {\bf Broken targets:} For example. a man's head and a man's body were sometimes detected in separate contours which caused breaking of the bounding boxes. But the splitting was low as compared to Vibe.
 \end{itemize} 
 
-\subsection*{CodeBook with Edge Detection}
+\section*{CodeBook And its improvement}
+\subsection*{Layered Model Detection(Cache based detection)}
+While testing, a cache model (as mentioned in the paper by Kim et al.) is maintained in addition to the original background model generated during training. This helps in detecting foreground objects against new
+backgrounds which were obtained during the detection phase.For this we define an additional cache model and for each incoming pixel at detection time we try to matching codeword in original training model, if fails then we try in this cache model and if even not in cache we add it in the cache model. Then we filter the codewords in cache and keep the ones that stay for a long time. 
+\begin{itemize}
+\item Another way to handle the problem of noisy bounding boxes due to movement of shadows. 
+\item Results in movement of small stationary foreground pixels into the background thereby drastically reducing the noise.
+\end{itemize}
+
+\subsection*{Combining codebook's result with an edge detection operator}
+The result of the codebook algorithm is combined with an edge detection algorithm (we used Sobel operator).
+The main idea is to highlight the boundaries of objects in a scene.This usage of an edge detector will verify if foreground pixels detected by the codebook algorithm belongs to an object or not.The increase in box-bounding accuracy was quite noticeable but we had to discard this improvement as the overhead of slower frame rate was much high as compared to the improvement achieved. 
+\begin{itemize}
+\item We observed an improvement of (~ 5-7 \%) over the basic codebook algorithm.
+\item We obtained an interesting result when working on convex hulls of the contours instead of directly drawing the bounding rectangle of a contour.
+\end{itemize}
 
 \end{document}
