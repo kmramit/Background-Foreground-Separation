@@ -37,7 +37,7 @@ Under the guidance of\\
 This project is being submitted as the CS771 course project under guidance of Prof Harish Karnick. 
 The purpose is to classify the frames as background or foreground with close to perfection.
 In this report, we provide the results of the various algorithms we tried to achieve better accuracy.
-We first tried standard OpenCV MOG library that resulted in about 92\% accuracy after suitably processing the input frames. Then we shifted to Vibe algorithm which lead to rapid increase in accuracy to about 98\%. Then we implemented the CodeBook Algorithm proposed by Kyungnam Kim and applied certain parameters tweeks to increase accuracy level to 98.37\%.
+We first tried standard OpenCV MOG library that resulted in about 92\% accuracy after suitably processing the input frames. Then we shifted to Vibe algorithm which lead to rapid increase in accuracy to about 98\%. The source code we used for ViBe was available from the authors on request. Then we implemented the CodeBook Algorithm on our own, proposed by Kyungnam Kim and applied certain parameters tweeks to increase accuracy level to 98.37\%.
 Observaing the problems in Coodbook we tried to apply edge detection operator on Coodbook results to further enhance the accuracy. Even though the accuracy level improved but the average frame rate fell dramaticaly that lead us to discard the improvement. 
 \end{abstract} 
 % \section{Motivation}
@@ -63,7 +63,7 @@ CodeBook algorithm works in two phases, namely learning phase and update phase.S
 
 \section{Drawbacks of CodeBook}
 \begin{itemize}
-\item {\bf Frame Rate :}CodeBook has quite poor frame rate of 8-9 frames/sec as compared to MOG 20 frames/sec and Vibe 33 frames/sec. 
+\item CodeBook has quite poor frame rate of 8-9 frames/sec as compared to MOG 20 frames/sec and Vibe 33 frames/sec. 
 \item For objects moving far away from the camera, if the contrast between the object and the road is low, it fades into the background.
 \item Without layered model detection, the noise rate exceeds the tolerable noise but the static foreground objects are not sent into the background.
 \item With layered model detection, the noise is drastically reduced whereas the static foreground objects start being sent into the background albeit very slowly.
@@ -81,7 +81,7 @@ backgrounds which were obtained during the detection phase.For this we define an
 
 \subsection{Combining codebook's result with an edge detection operator}
 The result of the codebook algorithm is combined with an edge detection algorithm (we used Sobel operator).
-The main idea is to highlight the boundaries of objects in a scene.This usage of an edge detector will verify if foreground pixels detected by the codebook algorithm b
+The main idea is to highlight the boundaries of objects in a scene.This usage of an edge detector will verify if foreground pixels detected by the codebook algorithm belong to an object or not.
 \begin{itemize}
 \item We observed an improvement of (~ 5-7 \%) over the basic codebook algorithm.
 \item We obtained an interesting result when working on convex hulls of the contours instead of directly drawing the bounding rectangle of a contour.
@@ -104,9 +104,9 @@ The main idea is to highlight the boundaries of objects in a scene.This usage of
 \subsection{Presence of Noisy contours}
 \begin{itemize}
 \item \textbf{Problem} : Movement of shadows of trees, illumination changes and shaking of leaves started generating contours of their own.
-\item \textbf{Solution}
+\item \textbf{Solution} : \textbf{Knowing our data set} to be of the following form, we could improvise on the accuracy.
     \begin{itemize}
-    \item All the video is such that no video can have small contours very close to the camera. In fact, these contours are usually due to the movement of the shadows formed by the leaves.
+    \item All the video is such that no video can have small contours very close to the camera. In fact, these contours are usually due to the movement of the shadows formed by the leaves or due to illumination changes.
     \item So we increased the minimum area of contours to be drawn close to the camera.
     \item The number of noisy contours detected was drastically reduced.
     \end{itemize}
@@ -123,22 +123,30 @@ The main idea is to highlight the boundaries of objects in a scene.This usage of
 
 \subsection{Results}
 %\begin{table}
-\begin{tabular}{l | c | c | c   }   
+\begin{tabular}{| l | c | c | c |  }   
+\hline
  & MOG & ViBe & Codebook (edge detection)\\
 \hline \hline
 Frame Rate& 20 & 33 & 8-9   \\  
-Accuracy(B/F) & 92.64 & 98.07 & 98.37 \\
-Accuracy(framewise) & 86.39 & 81.07 & 88.13  \\  
-Accuracy(overall) & 90.30 & 87.08 & 90.83
+\hline
+Accuracy (Background/Foreground) & 92.64 & 98.07 & 98.37 \\
+\hline
+Accuracy (Framewise Rectangle Overlap) & 86.39 & 81.07 & 88.13  \\  
+\hline
+Accuracy (Overall Rectangle Overlap) & 90.30 & 87.08 & 90.83\\
+\hline
 \end{tabular}
-%\caption{Results}
-%\end{table}
+\subsubsection{Comments}
+\begin{itemize}
+\item The first rectangle overlap accuracy is calculated by measuring the accuracy for each frame and then averaging it out over all frames in the test set.
+\item The second rectangle overlap accuracy is calculated by summing the intersection areas for all test frames and dividing it by the sum of union areas for all frames in the test set.
+\end{itemize}
 
 \section{Conclusions and Future Scope}
 \begin{itemize}
 \item We do not have an extremly high accuracy to show for our efforts inspite of trying out quite a lot of variations. The accuracy of our implementation of the CodeBook algorithm is better than those of MOG/ViBe but it is not a significant improvement.
 \item The rectangle overlap accuracy cannot be improved to reach a very high percentage such as 99 \% because even a small error in drawing the bounding box of a large foreground object results in a great decrease in the accuracy.
-\item But we believe that with better tuning and training, the CodeBook algorithm can achieve greater than 99 \% accuracy for the case of measuring 0-1 accuracy.
+\item But we believe that with better tuning and training, the CodeBook algorithm can achieve greater than 99 \% accuracy for the case of background foreground binary classification.
 \end{itemize}
 
 \section{References}
