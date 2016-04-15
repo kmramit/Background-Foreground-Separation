@@ -3,3 +3,11 @@
 *.so
 *.o
 *.pyc
+
+*.aux
+*.log
+*.pdf
+*.out
+*CMakeCache.txt*
+*CMake*
+*cmake*

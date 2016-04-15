@@ -1,0 +1,45 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[pdftex]{graphicx} 
+\usepackage{url} 
+
+\begin{document}
+\renewcommand\bibname{References} 
+
+\begin{titlepage}
+
+\begin{center}
+
+\textup{\small {\bf CS771 Project} \\ Report}\\[0.2in]
+
+\Large \textbf {Separation of foreground frame from background with  high
+accuracy in real time}\\[0.5in]
+{Department of Computer Science \& Engineering, \\IIT Kanpur }\\[0.2in]
+
+\normalsize Submitted by \\
+\begin{table}[h]
+\centering
+\begin{tabular}{lr} 
+Gaurav & 13274 \\
+Amit Kumar& 13094 \\
+R Sundararajan& 13523\\ \\ 
+\end{tabular}
+\end{table}
+
+\vspace{.1in}
+Under the guidance of\\
+{\textbf{Prof. Harish Karnick}}\\[0.2in]
+
+\end{center}
+\end{titlepage}
+% \begin{abstract}
+
+% \end{abstract} 
+% \section{Motivation}
+\section*{Algorithms Tried:}
+\subsection*{MOG (Mixture Of Gaussians)}
+Each pixel is characterised by its intensity in the RGB space.The probability of observing a pixel is modelled using a mixture of Gaussian distributions.For each new incoming pixel, the Mahalanobis distance to the distibution is calculated and depending on the threshold, the incoming pixel is classified as background or foreground.In practice, the unmodified output of MOG gives pretty noisy results whereas after blurring the output frame followed by erosion and dilation to we get better contours. 
+\subsection*{ViBe}
+Vibe is a standard background subtraction algorithm that extracts background features and information from moving frames.
+For each pixel values in the past at  its location are stored to maintain adn develop  history model.Now when we need to classify a pixel, we create a sphere of radius R centered a the location. A pixel is classified as background if the number of samples enclosed in the sphere corresponding to its model are greater than a threshold value.Finally, when the pixel is found to be part of the background, its value is propagated into the background model of a neighboring pixel. 
+
+\end{document}
