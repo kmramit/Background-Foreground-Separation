@@ -37,9 +37,28 @@ Under the guidance of\\
 % \section{Motivation}
 \section*{Algorithms Tried:}
 \subsection*{MOG (Mixture Of Gaussians)}
-Each pixel is characterised by its intensity in the RGB space.The probability of observing a pixel is modelled using a mixture of Gaussian distributions.For each new incoming pixel, the Mahalanobis distance to the distibution is calculated and depending on the threshold, the incoming pixel is classified as background or foreground.In practice, the unmodified output of MOG gives pretty noisy results whereas after blurring the output frame followed by erosion and dilation to we get better contours. 
+MOG characterise each pixel by its intensity in the RGB space.The probability of observing a pixel is modelled using a mixture of Gaussian distributions.For each new incoming pixel, the Mahalanobis distance to the distibution is calculated and depending on the threshold, the incoming pixel is classified as background or foreground.In practice, the unmodified output of MOG gives pretty noisy results whereas after blurring the output frame followed by erosion and dilation to we get better contours. 
+\subsubsection{Difficulties}
+\begin{itemize}
+\item {\bf Foreground Aperture problem:}With backgrounds having fast variations, it becomes difficult to model properly modelled using a few Gaussians.To counter this, if the model is approximated by a large number of Gaussians then slow moving foreground pixels are absorbed into the background resulting in a high false negative rate. 
+\item {\bf Shadow problem:}Shadows due to objects outside the frame lead to mis-classification of frames as foreground. And if we tend to remove the shadow Mog tend to remove the entire object on which the shadow falls leading to some foreground frame being classified as back-ground.
+\end{itemize} 
 \subsection*{ViBe}
 Vibe is a standard background subtraction algorithm that extracts background features and information from moving frames.
 For each pixel values in the past at  its location are stored to maintain adn develop  history model.Now when we need to classify a pixel, we create a sphere of radius R centered a the location. A pixel is classified as background if the number of samples enclosed in the sphere corresponding to its model are greater than a threshold value.Finally, when the pixel is found to be part of the background, its value is propagated into the background model of a neighboring pixel. 
+\begin{itemize}
+\item {\bf Stop targets:}If a moving target stops in the field of view for a long time it sends the the target into background thereby misclassifying the frame.
+\item {\bf Broken targets:} Splitting the entire target into several pieces because of some parts of target very similar to the background.This leads to quite low bounding box-accuracy  
+\end{itemize} 
+
+\subsection*{CodeBook Algorithm}
+CodeBook algorithm works in two phases, namely learning phase and update phase.Sample background values at each pixel are quantized into codebooks which represent a compressed form of background model much like the bag-of-words representation in text sequences.This helps in capturing background variation due to periodic like motion over a long spam of time with limited memory being used.One of the advantages over other algorithm is that it does not need to be trained on strictly empty frames.Can somewhat handle illumination variations and moving backgrounds but this is better handled using Layered Model Detection.
+\begin{itemize}
+\item {\bf Poor Frame Rate:}CodeBook has quite poor frame rate of 8-9 frames/sec as compared to MOG 20 frames/sec and Vibe
+33 frames/sec. 
+\item {\bf Broken targets:} For example. a man's head and a man's body were sometimes detected in separate contours which caused breaking of the bounding boxes. But the splitting was low as compared to Vibe.
+\end{itemize} 
+
+\subsection*{CodeBook with Edge Detection}
 
 \end{document}
